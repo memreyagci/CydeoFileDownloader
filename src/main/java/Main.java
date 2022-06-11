@@ -1,14 +1,14 @@
-import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 import utilities.ConfigurationReader;
+import utilities.DownloadOperations;
 import utilities.Driver;
 
+import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
 
 public class Main {
     public static void main(String[] args) {
-        WebDriver driver = Driver.getDriver();
-
         Login login = new Login();
         Canvas canvas = new Canvas();
 
@@ -21,6 +21,7 @@ public class Main {
         System.out.println("\t(2) By using configuration file");
         System.out.println("===============================================");
 
+        // TODO: Handle InputMismatchException.
         option = scanner.nextInt();
         while(option != 1 && option != 2) {
             System.out.print("Invalid number, please try again: ");
@@ -60,7 +61,31 @@ public class Main {
         }
 
         String lectureLink = lecturesMap.values().toArray()[option - 1].toString();
-        System.out.println(lectureLink);
+
+        Driver.getDriver().get(lectureLink);
+
+        List<WebElement> modules = canvas.getModules(lectureLink);
+
+        System.out.println("\n===============================================");
+        System.out.println("\tPlease type in the number of module: \n");
+        index = 1;
+        for(WebElement module : modules) {
+            System.out.println("(" + index++ + ")" + " " + canvas.getModuleTitle(module));
+        }
+        System.out.println("===============================================");
+
+        option = scanner.nextInt();
+        while(option < 1 || option >= modules.size()) {
+            System.out.print("Invalid number, please try again: ");
+            option = scanner.nextInt();
+        }
+
+        List<String> filesLinks = canvas.getModuleFilesList(modules.get(option - 1));
+
+//        for(String link : filesLinks) {
+//            Driver.getDriver().get(link);
+//        }
+
     }
 
 //    public void loginMenu() {

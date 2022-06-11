@@ -4,6 +4,7 @@ import org.openqa.selenium.WebElement;
 import pages.CanvasPage;
 import utilities.Driver;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -39,5 +40,38 @@ public class Canvas {
         }
 
         return lecturesMap;
+    }
+
+    public List<WebElement> getModules(String courseLink) {
+        String courseNumber = courseLink.split("https://learn.cybertekschool.com/courses/")[1];
+
+        return driver.findElements(
+                By.xpath("//*[contains(@data-module-url, '/courses/" + courseNumber + "/modules/')]")
+        );
+    }
+
+    public String getModuleTitle(WebElement module) {
+        return module.getAttribute("aria-label");
+    }
+
+    public static List<String> getModuleFilesList(WebElement moduleDiv) {
+        List<String> downloadableFileList = new ArrayList<>();
+        String fileName;
+        String fileLink;
+        List<WebElement> fileList = moduleDiv.findElements(By.xpath(".//div[2]/ul/li"));
+
+        for (WebElement fileItem : fileList) {
+            fileName = fileItem.findElement(By.xpath(".//div/a")).getAttribute("aria-label");
+            System.out.println("fileName: " + fileName);
+
+            if(!(fileName.contains("RECORDING") || fileName.contains("---"))) {
+                fileLink = fileItem.getAttribute("href");
+
+                downloadableFileList.add(fileLink);
+            }
+        }
+
+
+        return downloadableFileList;
     }
 }
