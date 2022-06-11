@@ -10,18 +10,29 @@ public class Main {
         WebDriver driver = Driver.getDriver();
 
         Login login = new Login(driver);
+        Canvas canvas = new Canvas(driver);
 
         Scanner scanner = new Scanner(System.in);
         int option;
 
-        System.out.println("Do you want to type in the credentials (1, recommended) or them to be read from the configuration file (2)?");
+        System.out.println("\n===============================================");
+        System.out.println("How do you want to login?");
+        System.out.println("\t(1) By typing the credentials (recommended)");
+        System.out.println("\t(2) By using configuration file");
+        System.out.println("===============================================");
+
         option = scanner.nextInt();
+        while(option != 1 && option != 2) {
+            System.out.print("Invalid number, please try again: ");
+            option = scanner.nextInt();
+        }
 
         if (option == 1) {
-            System.out.println("Email address: ");
+            System.out.println("\n");
+            System.out.print("Email address: ");
             String email = scanner.next();
 
-            System.out.println("Password: ");
+            System.out.print("Password: ");
             String password = scanner.next();
 
             login.loginToCydeo(email, password);
@@ -30,9 +41,30 @@ public class Main {
             login.loginToCydeo(credentials.get("email"), credentials.get("password"));
         }
 
+        canvas.goToCanvasPage();
 
+        Map<String, String> lecturesMap = canvas.getLectureMap();
 
+        System.out.println("\n===============================================");
+        System.out.println("Please type in the number of lecture: \n");
+        int index = 1;
+        for (String lectureName : lecturesMap.keySet()) {
+            System.out.println("\t(" + index++ + ")" + " " + lectureName);
+        }
+        System.out.println("===============================================");
 
+        option = scanner.nextInt();
+        while(option < 1 || option >= lecturesMap.size()) {
+            System.out.print("Invalid number, please try again: ");
+            option = scanner.nextInt();
+        }
+
+        String lectureLink = lecturesMap.values().toArray()[option - 1].toString();
+        System.out.println(lectureLink);
 
     }
+
+//    public void loginMenu() {
+//
+//    }
 }
