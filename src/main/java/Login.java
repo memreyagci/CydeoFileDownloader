@@ -7,11 +7,14 @@ public class Login {
     private final String cydeoUrl = "https://cydeo.com";
     private LoginPage loginPage;
 
-    public Login() {
+    private WebDriver driver;
+
+    public Login(WebDriver driver) {
+        this.driver = driver;
         loginPage = new LoginPage();
     }
 
-    public void loginToCydeo(WebDriver driver, String email, String password) {
+    public void loginToCydeo(   String email, String password) {
         driver.get(cydeoUrl);
         driver.findElement(By.linkText("Log In")).click();
 

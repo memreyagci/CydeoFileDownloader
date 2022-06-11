@@ -8,7 +8,9 @@ import java.util.Scanner;
 public class Main {
     public static void main(String[] args) {
         WebDriver driver = Driver.getDriver();
-        Login login = new Login();
+
+        Login login = new Login(driver);
+
         Scanner scanner = new Scanner(System.in);
         int option;
 
@@ -22,11 +24,12 @@ public class Main {
             System.out.println("Password: ");
             String password = scanner.next();
 
-            login.loginToCydeo(driver, email, password);
+            login.loginToCydeo(email, password);
         } else {
             Map<String, String> credentials = (Map<String, String>) ConfigurationReader.getProperty("credentials");
-            login.loginToCydeo(driver, credentials.get("email"), credentials.get("password"));
+            login.loginToCydeo(credentials.get("email"), credentials.get("password"));
         }
+
 
 
 
