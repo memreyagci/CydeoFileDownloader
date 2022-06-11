@@ -2,16 +2,17 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
 import pages.LoginPage;
+import utilities.Driver;
 
 public class Login {
+
     private final String cydeoUrl = "https://cydeo.com";
     private LoginPage loginPage;
-
     private WebDriver driver;
 
-    public Login(WebDriver driver) {
-        this.driver = driver;
+    public Login() {
         loginPage = new LoginPage();
+        driver = Driver.getDriver();
     }
 
     public void loginToCydeo(   String email, String password) {

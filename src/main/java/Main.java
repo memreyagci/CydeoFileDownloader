@@ -9,8 +9,8 @@ public class Main {
     public static void main(String[] args) {
         WebDriver driver = Driver.getDriver();
 
-        Login login = new Login(driver);
-        Canvas canvas = new Canvas(driver);
+        Login login = new Login();
+        Canvas canvas = new Canvas();
 
         Scanner scanner = new Scanner(System.in);
         int option;
@@ -61,7 +61,6 @@ public class Main {
 
         String lectureLink = lecturesMap.values().toArray()[option - 1].toString();
         System.out.println(lectureLink);
-
     }
 
 //    public void loginMenu() {
