@@ -9,13 +9,13 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class Canvas {
+public class CanvasCydeo {
     private final String canvasUrl = "https://learn.cybertekschool.com/";
     private CanvasPage canvasPage;
 
     private WebDriver driver;
 
-    public Canvas() {
+    public CanvasCydeo() {
         canvasPage = new CanvasPage();
         driver = Driver.getDriver();
     }
@@ -54,7 +54,7 @@ public class Canvas {
         return module.getAttribute("aria-label");
     }
 
-    public static List<String> getModuleFilesList(WebElement moduleDiv) {
+    public List<String> getModuleFilesList(WebElement moduleDiv) {
         List<String> downloadableFileList = new ArrayList<>();
         String fileName;
         String fileLink;
@@ -74,4 +74,17 @@ public class Canvas {
 
         return downloadableFileList;
     }
+
+
+    public String getClassNotesText() {
+        List<WebElement> paragraphs = driver.findElements(By.xpath("//div[@class='show-content user_content clearfix enhanced']/p"));
+        String classNotes = "";
+
+        for(WebElement paragraph : paragraphs) {
+            classNotes += paragraph.getText() + "\n";
+        }
+
+        return classNotes;
+    }
+
 }
