@@ -16,8 +16,8 @@ public class CanvasCydeo {
     private final String[] validFiles = new String[] {
             ".pdf",
             ".txt",
-            "classnotes",
-            "class notes",
+            "classnote",
+            "class note",
     };
 
     public CanvasCydeo() {
@@ -58,7 +58,6 @@ public class CanvasCydeo {
 
         return modulesNames;
     }
-
 
 
     public List<String> getModuleFilesList(String chosenModuleName) {
