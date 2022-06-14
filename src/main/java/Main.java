@@ -1,94 +1,42 @@
-import org.openqa.selenium.WebElement;
-import utilities.ConfigurationReader;
-import utilities.DownloadOperations;
 import utilities.Driver;
+import utilities.Menu;
 
 import java.util.List;
 import java.util.Map;
-import java.util.Scanner;
 
 public class Main {
     public static void main(String[] args) {
+
+        // Get the download path
+        String downloadPath = Menu.chooseDownloadPath();
+        Driver.setChromeOptions(downloadPath);
+
         Login login = new Login();
-        Canvas canvas = new Canvas();
 
-        Scanner scanner = new Scanner(System.in);
-        int option;
+        // Get login method, credentials and login
+        String[] credentials = Menu.chooseLoginMethod();
+        login.loginToCydeo(credentials[0], credentials[1]);
 
-        System.out.println("\n===============================================");
-        System.out.println("How do you want to login?");
-        System.out.println("\t(1) By typing the credentials (recommended)");
-        System.out.println("\t(2) By using configuration file");
-        System.out.println("===============================================");
+        // Go to canvas page
+        CanvasCydeo canvasCydeo = new CanvasCydeo();
+        canvasCydeo.goToCanvasPage();
 
-        // TODO: Handle InputMismatchException.
-        option = scanner.nextInt();
-        while(option != 1 && option != 2) {
-            System.out.print("Invalid number, please try again: ");
-            option = scanner.nextInt();
-        }
+        // Get a Map of courses and their links
+        Map<String, String> courses = canvasCydeo.getCourses();
 
-        if (option == 1) {
-            System.out.println("\n");
-            System.out.print("Email address: ");
-            String email = scanner.next();
+        // Choose a course and go to the link
+        String chosenCourseLink = Menu.chooseCourse(courses);
+        Driver.getDriver().get(chosenCourseLink);
 
-            System.out.print("Password: ");
-            String password = scanner.next();
+        // Get module names of chosen course and list them to be chosen.
+        List<String> modulesNames = canvasCydeo.getModulesNames(chosenCourseLink);
+        String chosenModuleName = Menu.chooseModule(modulesNames);
 
-            login.loginToCydeo(email, password);
-        } else {
-            Map<String, String> credentials = (Map<String, String>) ConfigurationReader.getProperty("credentials");
-            login.loginToCydeo(credentials.get("email"), credentials.get("password"));
-        }
+        // Get a list of links of files of chosen module.
+        List<String> chosenModuleFileLinks = canvasCydeo.getModuleFilesList(chosenModuleName);
 
-        canvas.goToCanvasPage();
-
-        Map<String, String> lecturesMap = canvas.getLectureMap();
-
-        System.out.println("\n===============================================");
-        System.out.println("Please type in the number of lecture: \n");
-        int index = 1;
-        for (String lectureName : lecturesMap.keySet()) {
-            System.out.println("\t(" + index++ + ")" + " " + lectureName);
-        }
-        System.out.println("===============================================");
-
-        option = scanner.nextInt();
-        while(option < 1 || option >= lecturesMap.size()) {
-            System.out.print("Invalid number, please try again: ");
-            option = scanner.nextInt();
-        }
-
-        String lectureLink = lecturesMap.values().toArray()[option - 1].toString();
-
-        Driver.getDriver().get(lectureLink);
-
-        List<WebElement> modules = canvas.getModules(lectureLink);
-
-        System.out.println("\n===============================================");
-        System.out.println("\tPlease type in the number of module: \n");
-        index = 1;
-        for(WebElement module : modules) {
-            System.out.println("(" + index++ + ")" + " " + canvas.getModuleTitle(module));
-        }
-        System.out.println("===============================================");
-
-        option = scanner.nextInt();
-        while(option < 1 || option >= modules.size()) {
-            System.out.print("Invalid number, please try again: ");
-            option = scanner.nextInt();
-        }
-
-        List<String> filesLinks = canvas.getModuleFilesList(modules.get(option - 1));
-
-//        for(String link : filesLinks) {
-//            Driver.getDriver().get(link);
-//        }
+        // TODO:
+        System.out.println(chosenModuleFileLinks);
 
     }
-
-//    public void loginMenu() {
-//
-//    }
 }
