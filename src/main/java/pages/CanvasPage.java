@@ -7,24 +7,21 @@ import utilities.Driver;
 
 import java.util.List;
 
+
 public class CanvasPage {
 
     public CanvasPage() {
         PageFactory.initElements(Driver.getDriver(), this);
     }
 
-    @FindBy(className = "ic-DashboardCard__box__container")
-    public WebElement lectureContainer;
 
-//    @FindBy(xpath = "//input[@type='password']")
-//    public List<WebElement> lectureList;
+    @FindBy(xpath = "//div[@class='ic-DashboardCard__box__container']/div['class=ic-DashboardCard']")
+    public List<WebElement> courseContainers;
 
-    @FindBy(xpath = "//button[@type='submit']")
-    public WebElement signInButton;
+    @FindBy(xpath = "//div[@id='doc_preview']")
+    public WebElement docPreview;
 
-    @FindBy(xpath = "//button[@disabled='']")
-    public WebElement signInButtonDisabled;
+    @FindBy(xpath = "//div[@class='show-content user_content clearfix enhanced']")
+    public WebElement textContainer;
 
-    @FindBy(xpath = "//div[.='Wrong email or password.']")
-    public WebElement wrongEmailOrPasswordErrorMessage;
 }
